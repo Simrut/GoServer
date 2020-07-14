@@ -1,9 +1,10 @@
 package main
 
 import (
+	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"golang.org/x/crypto/sha3"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"log"
 	"math/rand"
@@ -11,7 +12,7 @@ import (
 	"time"
 )
 
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890./!#_")
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randSeq(n int) string {
 	b := make([]rune, n)
@@ -22,24 +23,24 @@ func randSeq(n int) string {
 }
 
 // GenerateToken returns a unique token based on the provided email string
-func GenerateToken(randomstring string) string {
-	hasher := sha3.New512()
-	hash, err := hasher.Write([]byte(randomstring))
+func GenerateToken(email string) string {
+	hash, err := bcrypt.GenerateFromPassword([]byte(email), bcrypt.DefaultCost)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Hash to store:", string(hash))
 
+	hasher := md5.New()
+	hasher.Write(hash)
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func main() { //TODO switch to JWT?
+func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		randomseq := randSeq(20)
-		fmt.Println(randomseq)
-		io.WriteString(w, GenerateToken(randomseq))
+		//io.WriteString(w, "Hello, TLS!\n")
+		io.WriteString(w, GenerateToken(randSeq(10)))
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
