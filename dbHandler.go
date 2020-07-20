@@ -2,6 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
+	"strconv"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -16,12 +18,14 @@ func addToDB(token string) {
 	statement.Exec(token, time.Now())
 }
 
-func checkIfExists(token string) {
-	/*rows, _ := database.Query("SELECT id, firstname, lastname FROM people")
+func checkIfExists(token string) { //TODO prevent SQL injection
+	database, _ := sql.Open("sqlite3", "./tokens.db")
+	rows, _ := database.Query("SELECT id, token, timestamp FROM tokens")
 	var id int
-	var firstname string
-	var lastname string
+	var tokenFromDB string
+	var timestampFromDB string
 	for rows.Next() {
-		rows.Scan(&id, &firstname, &lastname)
-		fmt.Println(strconv.Itoa(id) + ": " + firstname + " " + lastname)*/
+		rows.Scan(&id, &tokenFromDB, &timestampFromDB)
+		fmt.Println(strconv.Itoa(id) + ": " + tokenFromDB + " " + timestampFromDB)
+	}
 }
