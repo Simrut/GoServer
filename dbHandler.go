@@ -14,11 +14,11 @@ func addToDB(token string) {
 	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS tokens (id INTEGER PRIMARY KEY, token TEXT, timestamp TEXT)")
 	statement.Exec()
 
-	statement, _ = database.Prepare("INSERT INTO people (token, timestamp) VALUES (?, ?)")
+	statement, _ = database.Prepare("INSERT INTO tokens (token, timestamp) VALUES (?, ?)")
 	statement.Exec(token, time.Now())
 }
 
-func checkIfExists(token string) { //TODO prevent SQL injection
+func checkIfExists(token string) { //TODO prevent SQL injection, implement function
 	database, _ := sql.Open("sqlite3", "./tokens.db")
 	rows, _ := database.Query("SELECT id, token, timestamp FROM tokens")
 	var id int
