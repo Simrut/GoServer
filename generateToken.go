@@ -26,7 +26,6 @@ type CustomPayload struct {
 
 var hs = jwt.NewHS256([]byte("lgg3d5sf8v3"))
 
-// GenerateToken returns a unique token based on the provided email string
 func GenerateToken() []byte {
 	now := time.Now()
 	pl := CustomPayload{
@@ -44,18 +43,15 @@ func GenerateToken() []byte {
 
 	token, err := jwt.Sign(pl, hs)
 	if err != nil {
-		// TODO create error handling
-	} else {
-
-		return token
+		log.Fatal(err)
 	}
+	return token
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		//io.WriteString(w, "Hello, TLS!\n")
 		io.WriteString(w, string(GenerateToken()))
 	})
 
