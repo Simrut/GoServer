@@ -18,6 +18,6 @@ func verifyToken(token []byte) {
 
 /*func main() {
 
-	//TODO implement server that calls verifyToken, possibly in seperate package
+	//TODO implement server that calls verifyToken, possibly in separate package
 
 }*/
