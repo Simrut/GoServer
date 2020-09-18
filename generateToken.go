@@ -50,10 +50,11 @@ func GenerateToken() []byte {
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	token := GenerateToken()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		token := GenerateToken()
 		io.WriteString(w, string(token))
+		verifyToken(token)
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
@@ -62,5 +63,4 @@ func main() {
 	err := http.ListenAndServe(":8443", nil)
 	log.Fatal(err)
 
-	verifyToken(token)
 }

@@ -12,7 +12,7 @@ func verifyToken(token []byte) {
 		log.Fatal(err)
 	} else {
 		log.Print(hd)
-		log.Print("Got verified")
+		log.Printf("Got verified")
 	}
 }
 
