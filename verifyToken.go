@@ -1,17 +1,11 @@
 package main
 
 import (
-	"github.com/gbrlsnchs/jwt/v3"
+	"github.com/gbrlsnchs/jwt"
 	"log"
 )
 
-func ReceiveToken() []byte {
-	return []byte("Test")
-}
-
-func main() {
-
-	token := ReceiveToken()
+func verifyToken(token []byte) {
 	var pl CustomPayload
 	hd, err := jwt.Verify(token, hs, &pl)
 	if err != nil {
@@ -20,5 +14,10 @@ func main() {
 		log.Print(hd)
 		log.Print("Got verified")
 	}
+}
+
+func main() {
+
+	//TODO implement server that calls verifyToken
 
 }
