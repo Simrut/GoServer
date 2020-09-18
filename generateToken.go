@@ -9,10 +9,19 @@ import (
 	"time"
 )
 
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
 type CustomPayload struct {
 	jwt.Payload
-	Foo string `json:"foo,omitempty"`
-	Bar int    `json:"bar,omitempty"`
+	RandSeq string `json:"foo,omitempty"`
 }
 
 var hs = jwt.NewHS256([]byte("lgg3d5sf8v3"))
@@ -30,8 +39,7 @@ func GenerateToken() []byte {
 			IssuedAt:       jwt.NumericDate(now),
 			JWTID:          "f5rek432",
 		},
-		Foo: "foo", //TODO edit this?
-		Bar: 1337,
+		RandSeq: randSeq(20),
 	}
 
 	token, err := jwt.Sign(pl, hs)
