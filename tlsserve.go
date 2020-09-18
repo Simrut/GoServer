@@ -15,22 +15,22 @@ type CustomPayload struct {
 	Bar int    `json:"bar,omitempty"`
 }
 
-var hs = jwt.NewHS256([]byte("secret"))
+var hs = jwt.NewHS256([]byte("lgg3d5sf8v3"))
 
 // GenerateToken returns a unique token based on the provided email string
 func GenerateToken() []byte {
 	now := time.Now()
 	pl := CustomPayload{
 		Payload: jwt.Payload{
-			Issuer:         "gbrlsnchs",
-			Subject:        "someone",
+			Issuer:         "theinsect",
+			Subject:        "transmission",
 			Audience:       jwt.Audience{"https://golang.org", "https://jwt.io"},
 			ExpirationTime: jwt.NumericDate(now.Add(24 * 30 * 12 * time.Hour)),
 			NotBefore:      jwt.NumericDate(now.Add(30 * time.Minute)),
 			IssuedAt:       jwt.NumericDate(now),
-			JWTID:          "foobar",
+			JWTID:          "f5rek432",
 		},
-		Foo: "foo",
+		Foo: "foo", //TODO edit this?
 		Bar: 1337,
 	}
 
@@ -48,7 +48,7 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		//io.WriteString(w, "Hello, TLS!\n")
-		io.WriteString(w, GenerateToken(randSeq(10)))
+		io.WriteString(w, string(GenerateToken()))
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
