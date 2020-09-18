@@ -1,10 +1,7 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-	"fmt"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/gbrlsnchs/jwt/v3"
 	"io"
 	"log"
 	"math/rand"
@@ -12,27 +9,38 @@ import (
 	"time"
 )
 
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
+type CustomPayload struct {
+	jwt.Payload
+	Foo string `json:"foo,omitempty"`
+	Bar int    `json:"bar,omitempty"`
 }
 
-// GenerateToken returns a unique token based on the provided email string
-func GenerateToken(email string) string {
-	hash, err := bcrypt.GenerateFromPassword([]byte(email), bcrypt.DefaultCost)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Hash to store:", string(hash))
+var hs = jwt.NewHS256([]byte("secret"))
 
-	hasher := md5.New()
-	hasher.Write(hash)
-	return hex.EncodeToString(hasher.Sum(nil))
+// GenerateToken returns a unique token based on the provided email string
+func GenerateToken() []byte {
+	now := time.Now()
+	pl := CustomPayload{
+		Payload: jwt.Payload{
+			Issuer:         "gbrlsnchs",
+			Subject:        "someone",
+			Audience:       jwt.Audience{"https://golang.org", "https://jwt.io"},
+			ExpirationTime: jwt.NumericDate(now.Add(24 * 30 * 12 * time.Hour)),
+			NotBefore:      jwt.NumericDate(now.Add(30 * time.Minute)),
+			IssuedAt:       jwt.NumericDate(now),
+			JWTID:          "foobar",
+		},
+		Foo: "foo",
+		Bar: 1337,
+	}
+
+	token, err := jwt.Sign(pl, hs)
+	if err != nil {
+		// TODO create error handling
+	} else {
+
+		return token
+	}
 }
 
 func main() {
