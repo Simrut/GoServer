@@ -16,8 +16,8 @@ func verifyToken(token []byte) {
 	}
 }
 
-func main() {
+/*func main() {
 
-	//TODO implement server that calls verifyToken
+	//TODO implement server that calls verifyToken, possibly in seperate package
 
-}
+}*/

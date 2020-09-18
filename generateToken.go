@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gbrlsnchs/jwt/v3"
+	"github.com/gbrlsnchs/jwt"
 	"io"
 	"log"
 	"math/rand"
