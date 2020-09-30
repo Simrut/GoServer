@@ -59,8 +59,8 @@ func main() {
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
 	log.Printf("About to listen on 8443. Go to http://127.0.0.1:8443/")
-	//err := http.ListenAndServeTLS(":8443", "cert.pem", "key.pem", nil)
-	err := http.ListenAndServe(":8443", nil)
+	err := http.ListenAndServeTLS(":8443", "cert.pem", "key.pem", nil) //TODO switch these certs? proxy not working anymore
+	//err := http.ListenAndServe(":8443", nil)
 	log.Fatal(err)
 
 }
