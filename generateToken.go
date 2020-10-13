@@ -57,7 +57,12 @@ func main() {
 	})
 
 	http.HandleFunc("/verify", func(w http.ResponseWriter, req *http.Request) {
-		verifyToken([]byte(req.URL.Query()["token"][0]))
+		tokenCorrect := verifyToken([]byte(req.URL.Query()["token"][0]))
+		if tokenCorrect {
+			io.WriteString(w, "Token OK")
+		} else {
+			io.WriteString(w, "Token Faulty")
+		}
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.

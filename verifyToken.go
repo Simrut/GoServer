@@ -5,14 +5,17 @@ import (
 	"log"
 )
 
-func verifyToken(token []byte) {
+func verifyToken(token []byte) bool {
 	var pl CustomPayload
 	hd, err := jwt.Verify(token, hs, &pl)
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Token incorrect")
+		log.Print(err)
+		return false
 	} else {
 		log.Print(hd)
 		log.Printf("Got verified")
+		return true
 	}
 }
 
