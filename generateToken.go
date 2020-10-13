@@ -54,7 +54,6 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		token := GenerateToken()
 		io.WriteString(w, string(token))
-		verifyToken(token)
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
