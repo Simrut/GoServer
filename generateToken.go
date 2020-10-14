@@ -54,7 +54,15 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		token := GenerateToken()
 		io.WriteString(w, string(token))
-		verifyToken(token)
+	})
+
+	http.HandleFunc("/verify", func(w http.ResponseWriter, req *http.Request) {
+		tokenCorrect := verifyToken([]byte(req.URL.Query()["token"][0]))
+		if tokenCorrect {
+			io.WriteString(w, "Token OK")
+		} else {
+			io.WriteString(w, "Token Faulty")
+		}
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
@@ -63,5 +71,5 @@ func main() {
 
 	//err := http.ListenAndServe(":8443", nil)
 	log.Fatal(err)
-
+	//localhost:8080/?key=hello%20golangcode.com
 }
